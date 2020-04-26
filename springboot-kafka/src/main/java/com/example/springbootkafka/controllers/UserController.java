@@ -1,5 +1,6 @@
 package com.example.springbootkafka.controllers;
 
+import com.example.springbootkafka.listner.ConsumerListner;
 import com.example.springbootkafka.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -15,6 +16,9 @@ public class UserController {
     private KafkaTemplate<String, User> _kafkaTemplate;
 
     private static final String TOPIC = "TestTopic";
+    /*@Autowired
+    private ConsumerListner _consumerListner;*/
+    private User _user;
 
  /*   @GetMapping("/publish/{name}")
     public String post(@PathVariable("name") final String name) {
@@ -31,6 +35,18 @@ public class UserController {
 
     }
 
+    @GetMapping("/consume")
+    public User getAllUser(){
+           return _user;
+    }
+
+    @KafkaListener(topics = "TestTopic",groupId = "group_User_json",
+            containerFactory = "userKafkaListenerFactory")
+    public User consumeJson(User user) {
+           _user = user;
+        System.out.println("Consumed message from Topic : TestTopic  and GroupID : group_User_json is : " + user);
+        return user;
+    }
 
 
 

@@ -9,7 +9,9 @@ public class ConsumerListner {
 
     @KafkaListener(topics = "TestTopic",groupId = "group_User_json",
             containerFactory = "userKafkaListenerFactory")
-    public void consumeJson(User user) {
+    public User consumeJson(User user) {
+
         System.out.println("Consumed message from Topic : TestTopic  and GroupID : group_User_json is : " + user);
+        return user;
     }
 }
